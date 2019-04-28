@@ -1,0 +1,55 @@
+大家熟悉使用IDEA的都知道Live Templates的自定义功能，可谓是大大增加了我们的开发速度
+
+但是postfix以前一直是使用固定的配置，没有办法自定义
+
+?
+
+偶然的机会打开postfix看到一个
+此处不知何时添加了一个postfix可编辑的功能
+爱探（gu）索（dao）的我
+
+打开了，这个加号
+
+
+
+此处当然不忘记度娘，只是搜索了半天没找到谁有教程，于是发此一文，丰富postfix自定义教程
+
+英文不好，只好经过一番鼓捣终于搞明白了定义规则：
+
+
+
+解释：
+从上到下四个红色框框，四个地方的编辑：
+
+1.key也就是我们变量后面的点带的东西比如? ?100.fori，fori就是key
+
+2.选择对应的jdk版本，我选择的是8版本，你们可以自己选择
+
+3.Applicable expression types适用的表达式类型，我选择的是not void（不为空，也就是接受所有的变量.自定义key）
+
+4.Apply to the topmost expression应用于最顶端的表达式（应该是快捷显示的时候放到最上面去）
+
+此处规则以System.err.println(var)为例
+
+此处填写? ?System.err.println($EXPR$)
+至于为什么是? $EXPR$
+参考下面一句话
+
+Use $EXPR$ variable to refer target expression
+
+最终效果
+
+1.
+
+
+
+2.
+
+
+
+注意：我使用的是2018.1.5发现2017版本中有些是不行的，所以建议我这个版本以后的IntelliJ IDEA版本
+--------------------- 
+作者：DeBugggggggggg 
+来源：CSDN 
+原文：https://blog.csdn.net/u013294097/article/details/88082278 
+版权声明：本文为博主原创文章，转载请附上博文链接！
