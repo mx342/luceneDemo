@@ -1,0 +1,6 @@
+server:
+  port: 8086
+spring:
+  data:
+    solr:
+      host: http://127.0.0.1:8080/collection1
