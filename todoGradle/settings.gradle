@@ -1,0 +1,5 @@
+rootProject.name = 'todoGradle'
+include 'model'
+include 'repository'
+include 'web'
+

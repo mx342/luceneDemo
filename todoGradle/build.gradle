@@ -1,0 +1,124 @@
+plugins {
+    id 'java'
+}
+
+group 'com.cyjz'
+version '1.0-SNAPSHOT'
+
+//配置所有项目公共信息
+allprojects{
+    apply plugin:'java'
+    sourceCompatibility = 1.8
+    //项目发布到仓库供其他人使用
+    //3步，1.添加发布插件
+//    apply plugin:'maven-publish'
+//    //2.添加发布url
+//    //3.执行发布任务
+//    publishing{
+//        publishions{
+//            myPublish(MavenPubliscation){
+//                from compenents.java
+//            }
+//        }
+//        repositories{
+//            maven{
+//                name "myRepo"
+//                url ""
+//            }
+//        }
+//    }
+}
+//配置子项目内容
+subprojects{
+    repositories {
+        //指定阿里云镜像
+        maven{
+            url 'http://maven.aliyun.com/nexus/content/groups/public/'
+        }
+        mavenCentral()
+    }
+
+    dependencies {
+        //对子项目依赖的写法
+//    compile project(":model")
+//    compile 'org.hibernate:hibernate-core:3.6.3.Final'
+        compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
+        testCompile group: 'junit', name: 'junit', version: '4.12'
+//    //解决冲突方式1，排除传递性依赖
+//    compile('org.hibernate:hibernate-core:3.6.3.Final'){
+//        exclude group:'org.slf4j',module:'slf4j-api'
+//    }
+//    //解决冲突方式2，强制指定一个版本
+//    configurations.all{
+//        resolutionStrategy{
+//            force 'org.slf4j:slf4j-api:1.7.24'
+//        }
+//    }
+    }
+}
+//发现版本冲突就构建失败，不要默认去选择最高版本的策略
+configurations.all{
+    resolutionStrategy{
+        failOnVersionConflict()
+    }
+}
+    //解决冲突方式2，强制指定一个版本
+configurations.all{
+    resolutionStrategy{
+        force 'org.slf4j:slf4j-api:1.7.24'
+    }
+}
+
+repositories {
+    //指定阿里云镜像
+    maven{
+        url 'http://maven.aliyun.com/nexus/content/groups/public/'
+    }
+    mavenCentral()
+}
+
+dependencies {
+    //对子项目依赖的写法
+//    compile project(":model")
+//    compile 'org.hibernate:hibernate-core:3.6.3.Final'
+//    compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+//    //解决冲突方式1，排除传递性依赖
+//    compile('org.hibernate:hibernate-core:3.6.3.Final'){
+//        exclude group:'org.slf4j',module:'slf4j-api'
+//    }
+//    //解决冲突方式2，强制指定一个版本
+//    configurations.all{
+//        resolutionStrategy{
+//            force 'org.slf4j:slf4j-api:1.7.24'
+//        }
+//    }
+}
+//创建文件夹目录的闭包
+def createDir = {
+    path ->
+        File dir = new File(path);
+        if(!dir.exists()){
+            dir.mkdirs()
+        }
+}
+//初始化生成项目的任务
+task makeJavaDir(){
+    def paths = ['src/test/test','src/test/web']
+    doFirst{
+        paths.forEach(createDir)
+    }
+}
+
+task makeWebDir(){
+    dependsOn 'makeJavaDir'
+    def paths = ['src/main/webapp','src/test/webapp']
+    doFirst{
+        paths.forEach(createDir)
+    }
+}
+//4个配置要求
+//1.所有项目中应用java插件
+//2.web子项目打包成war
+//3.所有项目添加logback日志功能
+//4.统一配置group和version
